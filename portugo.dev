@@ -1,0 +1,260 @@
+programa {
+  inclua biblioteca Util --> u
+  funcao inicio() {
+    inteiro aux1, atributos, tipo, habilidade, forca, atkS, defesa, hp, quantOrc, atk, atkOrc, sorte, elixir, inicP, inicD, draglife, dano, danoD, i, danoMassivo, danoMax, defense, dragDefense, dTotal, ddT, dragAtk, defTotal
+    inteiro aux = 1
+    caracter x
+    cadeia nome
+    escreva("Bem-vindo, aventureiro(a)!\nPrimeiramente vamos criar o seu personagem.\nPressione qualquer tecla para determinar o seu nome.")
+    leia(x)
+    escreva("\nDigite o seu nome: ")
+    leia(nome)
+    escreva("\n========================================================================")
+    escreva("\n\nMuito prazer, ", nome,".\n\nAgora, vamos começar a definir seus atributos.\nPressione qualquer tecla para rolar os dados e ganhar os valores dos atributos.")
+    leia(x)
+    para(i = 0; i < 4; i++) {
+      atributos = u.sorteia(1, 5)
+      escreva("\n", atributos)
+    }
+    escreva("\nAgora vamos escolher o valor dos seus atributos de acordo com suas preferências.\nPressione qualquer tecla para continuar.")
+    leia(x)
+    escreva("\nDigite o valor da habilidade: ")
+    leia(habilidade)
+    escreva("\nDigite o valor da força: ")
+    leia(forca)
+    escreva("\nDigite o valor do ataque especial: ")
+    leia(atkS)
+    escreva("\nDigite o valor da defesa: ")
+    leia(defesa)
+    escreva("\nAgora iremos sortear quanto de vida você tem.\nPressione qualquer tecla para rolar o dado e sortearmos o valor de sua vida.")
+    leia(x)
+    hp = u.sorteia(10, 30)
+    escreva("\nSua vida tem valor ", hp)
+    escreva("\n========================================================================")
+    escreva("\n\nMuito bem, aventureiro(a)! Sua ficha está completa.\n\nNome: ", nome,"\nHabilidade: ", habilidade,"\nForça: ", forca,"\nAtaque especial: ", atkS,"\nDefesa: ", defesa,"\nVida: ", hp,"\n")
+    escreva("\nPronto! Agora, a aventura vai começar...\nPressione qualquer tecla para começar.")
+    leia(x)
+    escreva("\n\nSocorro! Socorro! Me ajude, ", nome,"! A princesa Peach foi sequestrada por um terrível dragão! Por favor, salve ela! Ele a levou para uma caverna, mas cuidado, pois a entrada é protegida por Orcs!\nPressione qualquer tecla para ir até a caverna do dragão.")
+    leia(x)
+    quantOrc = u.sorteia(1, 4)
+    escreva("\n\nVocê chegou na entrada da caverna e encontrou [", quantOrc,"] Orcs protegendo-a. Ataque rapidamente, antes que eles percebam a sua presença!")
+    enquanto(quantOrc != 0) {
+      escreva("\nPressione qualquer tecla para atacar um Orc.")
+      leia(x)
+      atk = u.sorteia(1, 6)
+      se(atk <= habilidade) {
+        escreva("\nVocê derrotou um Orc!")
+        quantOrc = quantOrc - 1
+      } senao {
+        atkOrc = u.sorteia(1, 3)
+        hp = hp - atkOrc
+        se(hp <= 0) {
+          escreva("\nVocê errou seu ataque, recebeu um soco do Orc e morreu!\nGame Over!")
+        } senao {
+          escreva("\nVocê errou seu ataque e recebeu um soco do Orc!")
+          hp = hp - atkOrc
+        }
+      }
+    }
+    se(hp > 0) {
+      escreva("\n\nParabéns, ", nome,"! Você derrotou todos os Orcs que guardavam a entrada da caverna! Agora, resta salvar a princesa Peach das garras do dragão...\nPressione qualquer tecla para entrar na caverna do dragão.")
+      leia(x)
+      sorte = u.sorteia(1, 2)
+      se(sorte == 1) {
+        escreva("\nQue sorte! Perto dos Orcs, você encontrou um elixir que melhorou a sua saúde!\nPressione qualquer tecla para tomá-lo.")
+        leia(x)
+        elixir = u.sorteia(1, 10)
+        hp = hp + elixir
+        escreva("Você recuperou ",elixir," de hp")
+        escreva("\nA vida do Aventureiro agora é: ", hp)
+      }
+      escreva("\nVocê entrou na caverna e encontrou a princesa Peach! Mas o dragão não deixará que a leve facilmente...\nPressione qualquer tecla para iniciar o combate contra o dragão e rolar sua iniciativa.")
+      leia(x)
+      inicP = u.sorteia(1, 6)
+      inicD = u.sorteia(1, 6)
+      draglife = 50
+      enquanto(draglife > 0 e hp > 0) {
+        se(inicP >= inicD) {
+          escreva("\nVez do Aventureiro.")
+          se(aux == 1) {
+            escreva("\nQual ataque você deseja usar? Lembrando que o ataque especial só pode ser utilizado uma vez. (Ataque normal[1] | Ataque especial[2]) ")
+            leia(aux1)
+            se(aux1 == 2){
+              atk = 0
+              atk = u.sorteia(1, 6)
+              se(atk <= habilidade) {
+                dano = 0
+                danoMassivo = 0
+                para(i = 0; i < atkS; i++) {
+                  dano = u.sorteia(1, 6)
+                  danoMassivo = danoMassivo + dano
+                }
+                danoMassivo = danoMassivo * 2
+                defense = 0
+                dragDefense = 0
+                para(i = 0; i < 3; i++) {
+                  defense = u.sorteia(1, 6)
+                  dragDefense = dragDefense + defense
+                }
+                dTotal = danoMassivo - dragDefense
+                se(dTotal > 0) {
+                  draglife = draglife - dTotal
+                  escreva("Você causou ", dTotal," de dano ao Dragão ")
+                  escreva("\nBom ataque! Você machucou o dragão!\nPressione qualquer tecla para continuar.")
+                  leia(x)
+                } senao {
+                  draglife = draglife
+                  escreva("\nQue pena! Você acertou as duras escamas do dragão e não foi capaz de ferí-lo.\nPressione qualquer tecla para continuar.")
+                  leia(x)
+                }
+              } senao {
+                escreva("\nVocê errou o ataque!\nPressione qualquer tecla para continuar.")
+                leia(x)
+              }
+              aux = 0
+            } senao {
+              atk = u.sorteia(1, 6)
+              se(atk <= habilidade) {
+                dano = 0
+                danoMassivo = 0
+                para(i = 0; i < forca; i++) {
+                  dano = u.sorteia(1, 6)
+                  danoMassivo = danoMassivo + dano
+                }
+                defense = 0
+                dragDefense = 0
+                para(i = 0; i < 3; i++) {
+                  defense = u.sorteia(1, 6)
+                  dragDefense = dragDefense + defense
+                }
+                dTotal = danoMassivo - dragDefense
+                se(dTotal > 0) {
+                  draglife = draglife - dTotal
+                  escreva("Você causou ", dTotal," de dano ao Dragão ")
+                  escreva("\nBom ataque! Você machucou o dragão!\nPressione qualquer tecla para continuar.")
+                  leia(x)
+                } senao {
+                  draglife = draglife
+                  escreva("\nQue pena! Você acertou as duras escamas do dragão e não foi capaz de ferí-lo.\nPressione qualquer tecla para continuar.")
+                  leia(x)
+                }
+              } senao {
+                escreva("\nVocê errou o ataque!\nPressione qualquer tecla para continuar.")
+                leia(x)
+              }
+            }
+          inicP = 0
+          inicD = 1
+          } senao {
+            atk = u.sorteia(1, 6)
+            se(atk <= habilidade) {
+              dano = 0
+              danoMassivo = 0
+              para(i = 0; i < forca; i++) {
+                dano = u.sorteia(1, 6)
+                danoMassivo = danoMassivo + dano
+              }
+              defense = 0
+              dragDefense = 0
+              para(i = 0; i < 3; i++) {
+                defense = u.sorteia(1, 6)
+                dragDefense = dragDefense + defense
+              }
+              dTotal = danoMassivo - dragDefense
+              se(dTotal > 0) {
+                draglife = draglife - dTotal
+                escreva("Você causou ", dTotal," de dano ao Dragão ")
+                escreva("\nBom ataque! Você machucou o dragão!\nPressione qualquer tecla para continuar.")
+                leia(x)
+              } senao {
+                draglife = draglife
+                escreva("\nQue pena! Você acertou as duras escamas do dragão e não foi capaz de ferí-lo.\nPressione qualquer tecla para continuar.")
+                leia(x)
+              }
+            } senao {
+              escreva("\nVocê errou o ataque!\nPressione qualquer tecla para continuar.")
+              leia(x)
+            }
+          }
+          inicP = 0
+          inicD = 1
+          escreva("\nAgora é a vez do dragão atacar. Proteja-se!")
+        } senao {
+          escreva("\nVez do Dragão.")
+          tipo = 0
+          tipo = u.sorteia(1, 20)
+          se(tipo > 18 e tipo <= 20) {
+            dragAtk = 0
+            dragAtk = u.sorteia(1, 6)
+            defense = 0
+            defTotal = 0
+            para(i = 0; i < defesa; i++) {
+              defense = u.sorteia(1, 6)
+              defTotal = defTotal + defense
+            }
+            se(dragAtk <= 3) {
+              danoMax = 0
+              ddT = 0
+              danoMax = dragAtk * 5
+              ddT = danoMax - defTotal
+              se(ddT > 0) {
+                hp = hp - ddT
+                se(hp <= 0) {
+                  escreva("\nO dragão te acertou e você morreu!\nGame Over!")
+                } senao {
+                  escreva("\nO dragão te acertou! Fique mais atento na próxima!\nPressione qualquer tecla para continuar.")
+                  leia(x)
+                }
+              } senao {
+                escreva("\nBoa! Você bloqueou o ataque!")
+              }
+            } senao {
+              escreva("\nO dragão errou o ataque! Continue lutando!")
+            }
+          } senao {
+            dragAtk = 0
+            dragAtk = u.sorteia(1, 6)
+            se(dragAtk <= 3) {
+              danoD = 0
+              danoMax = 0
+              para(i = 0; i < 3; i++) {
+                danoD = u.sorteia(1, 6)
+                danoMax = danoMax + danoD
+              }
+              defense = 0
+              defTotal = 0
+              para(i = 0; i < defesa; i++) {
+                defense = u.sorteia(1, 6)
+                defTotal = defTotal + defense
+              }
+              defense = 0
+              defTotal = 0
+              ddT = 0
+              ddT = danoMax - defTotal
+              se(ddT > 0) {
+                hp = hp - ddT
+                se(hp <= 0) {
+                  escreva("\nO dragão te acertou e você morreu!\nGame Over!")
+                } senao {
+                 escreva("O dragão te feriu com um total de ", ddT," dano")
+                 escreva("\nO dragão te acertou! Fique mais atento na próxima!\nPressione qualquer tecla para continuar.")
+                  leia(x)
+                }
+              } senao {
+                escreva("\nBoa! Você bloqueou o ataque!")
+              }
+            } senao {
+              escreva("\nO dragão errou o ataque! Continue lutando!")
+            }
+          }
+        inicP = 1
+        inicD = 0
+        }
+      escreva("\n\nVida do dragão: ", draglife, "\nVida do aventureiro: ", hp, "\n")
+      }
+      se(hp > 0 e draglife <= 0) {
+        escreva("\nPrincesa Peach:\n-'", nome,", meu herói! Você veio me salvar e derrotou o dragão! Assim que chegarmos ao reino, consagrarei a ti como Sir ", nome,", o caçador de dragões!'")
+      }
+    }
+  }
+}
